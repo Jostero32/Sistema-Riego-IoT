@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg-main: #eef5ff;
+  --bg-aux-1: rgba(37, 99, 235, 0.08);
+  --bg-aux-2: rgba(14, 165, 233, 0.06);
+  --text-main: #0f172a;
+  --panel-bg: #f8fbff;
+  --panel-border: #cbddf5;
+  --panel-shadow: 0 8px 22px rgba(30, 64, 175, 0.1);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg-main: #0b1522;
+  --bg-aux-1: rgba(59, 130, 246, 0.1);
+  --bg-aux-2: rgba(56, 189, 248, 0.08);
+  --text-main: #e2e8f0;
+  --panel-bg: #111d2c;
+  --panel-border: rgba(100, 116, 139, 0.4);
+  --panel-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply antialiased transition-colors duration-300;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  background-image: radial-gradient(circle at top right, var(--bg-aux-1), transparent 42%),
+    radial-gradient(circle at bottom left, var(--bg-aux-2), transparent 38%);
+}
+
+.card-surface {
+  @apply rounded-xl backdrop-blur-md;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+}
+
+.dashboard-shell.dark,
+.dark .dashboard-shell {
+  background-color: #0b1522;
+}
+
+html:not(.dark) .text-white,
+html:not(.dark) .text-slate-100,
+html:not(.dark) .text-slate-50 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-slate-300,
+html:not(.dark) .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Scroll reutilizable (Sensores, Alertas, nav…) — track oscuro, thumb píldora gris */
+.dashboard-scroll,
+.sensor-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af rgba(10, 14, 20, 0.95);
+}
+
+html:not(.dark) .dashboard-scroll,
+html:not(.dark) .sensor-scroll {
+  scrollbar-color: #94a3b8 rgba(203, 221, 245, 0.8);
+}
+
+.dashboard-scroll::-webkit-scrollbar,
+.sensor-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.dashboard-scroll::-webkit-scrollbar-track,
+.sensor-scroll::-webkit-scrollbar-track {
+  background: rgba(10, 14, 20, 0.92);
+  border-radius: 9999px;
+  margin: 2px 0;
+}
+
+.dashboard-scroll::-webkit-scrollbar-thumb,
+.sensor-scroll::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 9999px;
+  border: 1px solid rgba(10, 14, 20, 0.4);
+}
+
+.dashboard-scroll::-webkit-scrollbar-thumb:hover,
+.sensor-scroll::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+html:not(.dark) .dashboard-scroll::-webkit-scrollbar-track,
+html:not(.dark) .sensor-scroll::-webkit-scrollbar-track {
+  background: rgba(203, 221, 245, 0.8);
+}
+
+html:not(.dark) .dashboard-scroll::-webkit-scrollbar-thumb,
+html:not(.dark) .sensor-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+@keyframes sensor-gauge-fill-in {
+  from {
+    stroke-dashoffset: 314;
+  }
+  to {
+    stroke-dashoffset: var(--gauge-target-offset, 0);
+  }
+}
+
+.sensor-gauge-fill {
+  animation: sensor-gauge-fill-in 850ms ease-out forwards;
+}
+
+@keyframes sensor-bar-fill-in {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--sensor-bar-target-width, 0%);
+  }
+}
+
+.sensor-bar-fill {
+  width: 0%;
+  animation: sensor-bar-fill-in 850ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensor-gauge-fill {
+    animation: none;
+    stroke-dashoffset: var(--gauge-target-offset, 0);
+  }
+
+  .sensor-bar-fill {
+    animation: none;
+    width: var(--sensor-bar-target-width, 0%);
+  }
+}
