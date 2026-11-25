@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "titulo": "Sistema de riego IoT",
+  "resumen": "Monitoreo de un sistema de riego: Arduino Mega con sensores, gateway ESP32 que publica por MQTT, y backend Spring Boot con MongoDB, API REST y WebSocket en tiempo real.",
+  "categorias": ["iot", "backend", "vinculación"],
+  "stack": ["ESP32", "Arduino", "MQTT", "Mosquitto", "Spring Boot", "MongoDB", "WebSocket", "Docker"],
+  "estado": "Backend probado de extremo a extremo; firmware compila",
+  "destacado": true,
+  "anio": 2026,
+  "rol": "Firmware del gateway y backend",
+  "portada": "docs/esquema-conexiones.svg",
+  "capturas": ["docs/esquema-conexiones.svg", "docs/img/swagger.png"],
+  "aspectos": [
+    "Gateway ESP32: trama serie del Mega → JSON con hora NTP → MQTT QoS 1",
+    "Portal de configuración Wi-Fi/MQTT guardado en NVS",
+    "Lecturas en tiempo real por STOMP y estadísticas agregadas por sensor",
+    "Stack completo con docker compose y simulador del ESP32 para pruebas"
+  ],
+  "demo": null
+}
