@@ -9,16 +9,19 @@
 </p>
 
 Plataforma de monitoreo para un sistema de riego, desarrollada como proyecto de **vinculación con la
-sociedad** (Universidad Técnica de Ambato). Un **Arduino Mega** lee los sensores del cultivo, un
-**ESP32** hace de *gateway* y publica las lecturas por **MQTT**, y un backend **Spring Boot** las guarda en
+sociedad** (Universidad Técnica de Ambato). Un **Arduino Mega** envía las lecturas por puerto serie, un
+**ESP32** hace de *gateway* y las publica por **MQTT**, y un backend **Spring Boot** las guarda en
 **MongoDB** y las expone por **API REST** y **WebSocket** en tiempo real.
+
+> Este repositorio contiene el **gateway ESP32** y el **servidor**. Para el Mega incluye un programa de
+> **ejemplo** (`mega_ejemplo/`) que envía tramas de prueba, sin sensores reales.
 
 ## Arquitectura
 
 ```mermaid
 flowchart LR
     subgraph CAMPO["En campo"]
-        S["Sensores<br/>temperatura · humedad<br/>humedad del suelo · luz"] --> M["Arduino Mega 2560"]
+        S["Sensores del cultivo<br/>(en el ejemplo: valores<br/>aleatorios o manuales)"] --> M["Arduino Mega 2560<br/>mega_ejemplo/"]
         M -->|"UART 9600<br/>trama de texto"| E["ESP32 gateway<br/>esp32_iot/"]
     end
     subgraph SERVIDOR["Servidor (docker compose)"]
@@ -75,6 +78,24 @@ sequenceDiagram
 | Parpadeo lento (1 s) | Wi-Fi conectado, sin MQTT (reintenta cada 5 s) |
 | Parpadeo medio (0,5 s) | Sin Wi-Fi, reconectando |
 | Parpadeo rápido (0,2 s) | Modo AP: portal de configuración activo |
+
+## Programa de ejemplo del Mega (`mega_ejemplo/`)
+
+Es lo más simple posible: no lee sensores, solo envía tramas al ESP32 por `Serial1` (9600 baudios).
+
+- **Automático:** cada 5 s envía temperatura, humedad y humedad del suelo con valores aleatorios.
+- **Manual:** lo que se escribe en el Monitor Serie de la PC (115200 baudios, «Nueva línea») se reenvía al
+  ESP32. Al escribir se pausa el modo automático; `auto` lo reanuda.
+
+```
+-> TMP_INT:temperature:27.4:C
+-> HUM_INT:humidity:63.1:%
+-> SOIL_1:soil_moisture:38.9:%
+-> END
+```
+
+Compila con Arduino IDE, placa **Arduino Mega or Mega 2560** (3 % de la flash). Para usar sensores reales,
+basta con reemplazar los valores de `enviarTramaAleatoria()` por las lecturas y conservar el formato.
 
 ## Protocolos
 
@@ -173,7 +194,8 @@ las líneas de la trama y `END`, y el ESP32 las publica igual que si vinieran de
 
 ## Limitaciones y pendientes
 
-- El código del **Arduino Mega** (lectura de sensores y envío de tramas) no está en este repositorio.
+- El programa del **Mega con sensores reales** no forma parte del proyecto: `mega_ejemplo/` solo genera
+  tramas de prueba con el formato que espera el gateway.
 - Mosquitto acepta conexiones **anónimas** y sin TLS, y las credenciales de MongoDB son de desarrollo: antes
   de exponerlo fuera de la red local hay que activar usuarios en el broker y cambiar las credenciales.
 - Las reconexiones Wi-Fi del firmware son bloqueantes durante los reintentos.
@@ -182,6 +204,7 @@ las líneas de la trama y `END`, y el ESP32 las publica igual que si vinieran de
 
 ```
 ├── esp32_iot/          Firmware del gateway ESP32 (Arduino)
+├── mega_ejemplo/       Programa de ejemplo del Mega: tramas aleatorias o escritas desde la PC
 ├── backend/            Spring Boot 4 · Java 21 · MQTT (Paho) · MongoDB · STOMP · springdoc
 ├── mosquitto/config/   Configuración del broker
 ├── mongo-init/         Datos de ejemplo

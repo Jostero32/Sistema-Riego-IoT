@@ -52,10 +52,10 @@
   <!-- Arduino Mega 2560 -->
   <rect x="760" y="200" width="240" height="340" rx="10" fill="#00878F"/>
   <text x="880" y="236" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Arduino Mega 2560</text>
-  <text x="880" y="256" text-anchor="middle" font-size="11" fill="#cffafe">lee los sensores y envía tramas</text>
+  <text x="880" y="256" text-anchor="middle" font-size="11" fill="#cffafe">envía tramas al ESP32</text>
   <rect x="790" y="270" width="180" height="50" rx="6" fill="#006b72"/>
-  <text x="880" y="290" text-anchor="middle" font-size="11" fill="#ecfeff">temperatura · humedad</text>
-  <text x="880" y="306" text-anchor="middle" font-size="11" fill="#ecfeff">humedad del suelo · luz</text>
+  <text x="880" y="290" text-anchor="middle" font-size="11" fill="#ecfeff">mega_ejemplo: valores</text>
+  <text x="880" y="306" text-anchor="middle" font-size="11" fill="#ecfeff">aleatorios o desde la PC</text>
   <circle cx="760" cy="344" r="5" fill="#facc15"/><text class="megapin" x="772" y="348">RX1 · D19</text>
   <circle cx="760" cy="372" r="5" fill="#facc15"/><text class="megapin" x="772" y="376">TX1 · D18</text>
   <circle cx="760" cy="484" r="5" fill="#facc15"/><text class="megapin" x="772" y="488">GND</text>
