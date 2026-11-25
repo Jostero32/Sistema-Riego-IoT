@@ -5,15 +5,25 @@
   <img alt="MQTT" src="https://img.shields.io/badge/MQTT-Mosquitto_2-660066?logo=eclipsemosquitto&logoColor=white" />
   <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-4-6DB33F?logo=springboot&logoColor=white" />
   <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white" />
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-14-000000?logo=nextdotjs&logoColor=white" />
   <img alt="Docker" src="https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white" />
 </p>
 
 Plataforma de monitoreo para un sistema de riego, desarrollada como proyecto de **vinculación con la
 sociedad** (Universidad Técnica de Ambato). Un **Arduino Mega** envía las lecturas por puerto serie, un
 **ESP32** hace de *gateway* y las publica por **MQTT**, y un backend **Spring Boot** las guarda en
-**MongoDB** y las expone por **API REST** y **WebSocket** en tiempo real.
+**MongoDB** y las expone por **API REST** y **WebSocket** en tiempo real. Un **dashboard Next.js** muestra
+los sensores en vivo junto al clima de referencia (Open-Meteo) y recomienda cuándo regar.
 
-> Este repositorio contiene el **gateway ESP32** y el **servidor**. Para el Mega incluye un programa de
+![Dashboard](docs/img/dashboard.png)
+
+| Sensores en vivo | Riego | Alertas |
+|---|---|---|
+| <img src="docs/img/sensores.png" alt="Sensores" /> | <img src="docs/img/riego.png" alt="Riego" /> | <img src="docs/img/alertas.png" alt="Alertas" /> |
+
+<sub>Capturas con las lecturas de ejemplo de `mongo-init/` y del simulador del ESP32.</sub>
+
+> Este repositorio contiene el **gateway ESP32**, el **servidor** y el **dashboard** (`frontend/`). Para el Mega incluye un programa de
 > **ejemplo** (`mega_ejemplo/`) que envía tramas de prueba, sin sensores reales.
 
 ## Arquitectura
@@ -34,8 +44,9 @@ flowchart LR
     B -->|"suscripción esp/sensores/#"| API
     API --> DB
     ME --> DB
-    API -->|"REST /api/v1"| C["Clientes<br/>dashboard · app"]
-    API -->|"STOMP /ws<br/>/topic/readings/live"| C
+    API -->|"REST /api/v1"| C["Dashboard Next.js<br/>frontend/ :3000"]
+    API -->|"STOMP /ws<br/>/topic/devices/&lt;id&gt;/readings"| C
+    OM["Open-Meteo<br/>clima y pronóstico"] --> C
 ```
 
 ## Flujo de una lectura
@@ -129,6 +140,7 @@ docker compose up -d --build
 
 | Servicio | Dirección |
 |---|---|
+| Dashboard | <http://localhost:3000> |
 | Swagger UI | <http://localhost:8080/swagger-ui.html> |
 | API REST | <http://localhost:8080/api/v1/devices> |
 | WebSocket (STOMP) | `ws://localhost:8080/ws` |
@@ -146,6 +158,8 @@ curl "http://localhost:8080/api/v1/readings/latest?deviceId=esp32_01"
 ```
 
 El script publica por MQTT exactamente el JSON que arma el firmware, así que prueba el mismo camino que el ESP32.
+Con el dashboard abierto en el dispositivo `esp32-1`, `./tools/simular-esp32.sh 20 2 esp32-1` muestra los valores
+cambiando en vivo (el indicador **WS** queda en verde).
 
 ![Swagger UI](docs/img/swagger.png)
 
@@ -212,3 +226,10 @@ las líneas de la trama y `END`, y el ESP32 las publica igual que si vinieran de
 ├── docs/               Esquema de conexiones y capturas
 └── docker-compose.yml
 ```
+
+## Créditos
+
+Proyecto de vinculación desarrollado en equipo. El **dashboard** (`frontend/`) es obra de
+[Leo538](https://github.com/Leo538); se incorporó con su historial de commits desde
+[Vinculacion-Sistema-Riego](https://github.com/Leo538/Vinculacion-Sistema-Riego). El firmware del gateway, el
+backend y la infraestructura Docker son de [Jostero32](https://github.com/Jostero32).

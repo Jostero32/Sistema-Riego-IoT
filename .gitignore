@@ -84,3 +84,9 @@ Thumbs.db
 
 # Documentation
 HELP.md
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/.env*.local
+*.tsbuildinfo

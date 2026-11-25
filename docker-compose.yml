@@ -1,14 +1,28 @@
-# Sistema de riego IoT: broker MQTT + backend Spring Boot + MongoDB.
+# Sistema de riego IoT: dashboard Next.js + broker MQTT + backend Spring Boot + MongoDB.
 #
 #   cp .env.example .env   (opcional: puertos y credenciales)
 #   docker compose up -d --build
 #
+#   Dashboard:           http://localhost:3000
 #   API REST + Swagger:  http://localhost:8080/swagger-ui.html
 #   WebSocket (STOMP):   ws://localhost:8080/ws
 #   MQTT (para el ESP32): <IP-del-PC>:1883
 #   mongo-express:       http://localhost:8081
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # URL del backend tal como la ve el navegador
+        NEXT_PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8080}
+    container_name: iot-frontend
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend

@@ -1,19 +1,40 @@
 {
   "version": 1,
   "titulo": "Sistema de riego IoT",
-  "resumen": "Monitoreo de un sistema de riego: Arduino Mega que envía tramas por serie, gateway ESP32 que publica por MQTT, y backend Spring Boot con MongoDB, API REST y WebSocket en tiempo real.",
-  "categorias": ["iot", "backend", "vinculación"],
-  "stack": ["ESP32", "Arduino", "MQTT", "Mosquitto", "Spring Boot", "MongoDB", "WebSocket", "Docker"],
-  "estado": "Backend probado de extremo a extremo; firmware compila",
+  "resumen": "Monitoreo de un sistema de riego: Arduino Mega con sensores, gateway ESP32 que publica por MQTT, backend Spring Boot con MongoDB y un dashboard Next.js con lecturas en vivo, clima y recomendación de riego.",
+  "categorias": [
+    "iot",
+    "backend",
+    "vinculación"
+  ],
+  "stack": [
+    "ESP32",
+    "Arduino",
+    "MQTT",
+    "Spring Boot",
+    "MongoDB",
+    "WebSocket",
+    "Next.js",
+    "Docker"
+  ],
+  "estado": "Funcional de punta a punta con simulador; firmware compila",
   "destacado": true,
   "anio": 2026,
-  "rol": "Firmware del gateway y backend",
+  "rol": "Firmware del gateway, backend y Docker; dashboard en equipo",
   "portada": "docs/img/portada.png",
-  "capturas": ["docs/img/portada.png", "docs/esquema-conexiones.svg", "docs/img/swagger.png"],
+  "capturas": [
+    "docs/img/portada.png",
+    "docs/img/dashboard.png",
+    "docs/img/sensores.png",
+    "docs/img/riego.png",
+    "docs/img/alertas.png",
+    "docs/esquema-conexiones.svg",
+    "docs/img/swagger.png"
+  ],
   "aspectos": [
     "Gateway ESP32: trama serie del Mega → JSON con hora NTP → MQTT QoS 1",
     "Portal de configuración Wi-Fi/MQTT guardado en NVS",
-    "Lecturas en tiempo real por STOMP y estadísticas agregadas por sensor",
+    "Dashboard en vivo por STOMP con clima de Open-Meteo, alertas y recomendación de riego",
     "Stack completo con docker compose y simulador del ESP32 para pruebas"
   ],
   "demo": null
