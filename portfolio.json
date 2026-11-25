@@ -8,8 +8,8 @@
   "destacado": true,
   "anio": 2026,
   "rol": "Firmware del gateway y backend",
-  "portada": "docs/esquema-conexiones.svg",
-  "capturas": ["docs/esquema-conexiones.svg", "docs/img/swagger.png"],
+  "portada": "docs/img/portada.png",
+  "capturas": ["docs/img/portada.png", "docs/esquema-conexiones.svg", "docs/img/swagger.png"],
   "aspectos": [
     "Gateway ESP32: trama serie del Mega → JSON con hora NTP → MQTT QoS 1",
     "Portal de configuración Wi-Fi/MQTT guardado en NVS",
